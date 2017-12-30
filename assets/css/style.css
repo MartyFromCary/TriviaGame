@@ -1,0 +1,23 @@
+body {
+	/*
+	background-image: url("https://media2.picsearch.com/is?8FGMH2cVpSDEkvYHzx0cR2ju7E24zLVTKO4GvqIFIYs&height=350")
+	*/
+	/*
+	background-image: url('https://i.pinimg.com/236x/d2/fa/1b/d2fa1b2b3bf4a5bd72be79b240be3194--saved-by-the-bell-graphic-patterns.jpg');
+	*/
+}
+
+.container {
+	padding: 10px;
+}
+
+.button-group,h1 {
+	background-color: white;
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+p {
+	font-size: 20px;
+	font-weight: bold;
+}
