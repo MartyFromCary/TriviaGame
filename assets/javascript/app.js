@@ -20,57 +20,57 @@ function Box(){
 
 var Body;
 var Start;
-var newDiv;
 var Done;
 
 function runQuiz(obj) {
+	var radioInpArr;
+	var myAnswers=[];
+	var newDiv;
+
 	if( obj.background_image!==null){
 		Body.css("background-image","url("+obj.background_image+")");
 	}
 	Start.append(Box().append($("<h1>").text(obj.title)));
 
-	obj.items.forEach(function(item,index){
+	obj.items.forEach(function(questionGroup,questionNr){
+		myAnswers.push(-1);
 		newDiv=Box();
-		if( item.background_color!==null) {
-			newDiv.css("background-color",item.background_color)
+		if( questionGroup.background_color!==null) {
+			newDiv.css("background-color",questionGroup.background_color)
 		}
-		newDiv.append($("<h2>").text(item.question));
+		newDiv.append($("<h2>").text(questionGroup.question));
 
 		var Form=$("<form>");
-		var buttonName="Question"+index;
-		item.answers.forEach(function(item,index){
+		questionGroup.answers.forEach(function(answer,answerNr){
+			var radioInp=$("<input>").attr("type","radio").attr("name",questionNr).val(answerNr);
+
 			Form.append(
 				$("<label>")
 					.addClass("radio-inline")
-					.append(
-						$("<input>")
-						.attr("type","radio")
-						.attr("name",buttonName)
-						.val(index))
-					.append(
-						$("<p>")
-						.text(item))
+					.append(radioInp).append($("<p>").text(answer))
 			);
+			//radioInpArr.push(radioInp);
 		});
 		newDiv.append(Form);
 		Start.append(newDiv);
 	});
-
 	Done=$("<button>").addClass("btn btn-success").css("font-size","36px").text("DONE");
-	Done.on("click",Score);
+
+	radioInpArr=$(":radio");
+	radioInpArr.on("click",function(){
+		console.log("name: "+$(this).attr("name")+" value: "+$(this).attr("value"));
+		myAnswers[$(this).attr("name")] = $(this).attr("value");
+	});
+
 	Start.append(Box().addClass("text-center").append(Done));
-}
+	Done.on("click",function(){
+		console.log(myAnswers.length);
+		for(var i=0;i<myAnswers.length;i++){
+			console.log("myAnswer: "+myAnswers[i]+" correct_answer: "+obj.items[i].correct_answer);
+		}
+	});
 
-function Score(){
-	//alert("Score");
-	var Inp=$("input");
-	//alert(Inp.length);
-	for(var i=0;i<Inp.length;i++){
-		console.log(Inp[i]);
-		console.log("name: "+Inp[i].name+" value: "+Inp[i].value);
-	}
 }
-
 
 $(document).ready(function() {
 
