@@ -12,20 +12,25 @@ function reportObj(obj) {
 	});
 }
 
-reportObj(Trivia);
+//reportObj(Trivia);
+
+function Box(){
+	return $("<div>").addClass("button-group");
+}
 
 var Body;
 var Start;
 var newDiv;
+var Done;
 
 function runQuiz(obj) {
 	if( obj.background_image!==null){
 		Body.css("background-image","url("+obj.background_image+")");
 	}
-	Start.append($("<div>").addClass("button-group").append($("<h1>").text(obj.title)));
+	Start.append(Box().append($("<h1>").text(obj.title)));
 
 	obj.items.forEach(function(item,index){
-		newDiv=$("<div>").addClass("button-group");
+		newDiv=Box();
 		if( item.background_color!==null) {
 			newDiv.css("background-color",item.background_color)
 		}
@@ -50,8 +55,22 @@ function runQuiz(obj) {
 		newDiv.append(Form);
 		Start.append(newDiv);
 	});
-	Start.append($("<div>").addClass("button-group").append($("<h1>").text("DONE")));
+
+	Done=$("<button>").addClass("btn btn-success").css("font-size","36px").text("DONE");
+	Done.on("click",Score);
+	Start.append(Box().addClass("text-center").append(Done));
 }
+
+function Score(){
+	//alert("Score");
+	var Inp=$("input");
+	//alert(Inp.length);
+	for(var i=0;i<Inp.length;i++){
+		console.log(Inp[i]);
+		console.log("name: "+Inp[i].name+" value: "+Inp[i].value);
+	}
+}
+
 
 $(document).ready(function() {
 
