@@ -1,8 +1,8 @@
 
-.button-group,h1 {
-	background-color: white;
+.button-group {
+	background-color: lightgray;
 	padding: 10px;
-	margin-bottom: 20px;
+	margin: 20px;
 }
 
 p {
