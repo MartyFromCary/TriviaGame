@@ -30,7 +30,7 @@ function runQuiz(obj) {
 	if( obj.background_image!==null){
 		Body.css("background-image","url("+obj.background_image+")");
 	}
-	Start.append(Box().append($("<h1>").text(obj.title)));
+	Start.append(Box().addClass("text-center").append($("<h1>").text(obj.title)));
 
 	obj.items.forEach(function(questionGroup,questionNr){
 		myAnswers.push(-1);
@@ -54,22 +54,42 @@ function runQuiz(obj) {
 		newDiv.append(Form);
 		Start.append(newDiv);
 	});
-	Done=$("<button>").addClass("btn btn-success").css("font-size","36px").text("DONE");
 
 	radioInpArr=$(":radio");
 	radioInpArr.on("click",function(){
-		console.log("name: "+$(this).attr("name")+" value: "+$(this).attr("value"));
 		myAnswers[$(this).attr("name")] = $(this).attr("value");
 	});
 
+	Done=$("<button>").addClass("btn btn-success").css("font-size","36px").text("DONE");
 	Start.append(Box().addClass("text-center").append(Done));
-	Done.on("click",function(){
-		console.log(myAnswers.length);
-		for(var i=0;i<myAnswers.length;i++){
-			console.log("myAnswer: "+myAnswers[i]+" correct_answer: "+obj.items[i].correct_answer);
-		}
-	});
 
+	Done.on("click",function(){
+		var correctAnswers=0;
+		var incorrectAnswers=0;
+		var unanswered=0;
+		
+		myAnswers.forEach(function(myAnswer,index){
+			console.log("myAnswer: "+myAnswer+" correct_answer: "+obj.items[index].correct_answer);
+			if( myAnswer== -1){
+				unanswered++;
+				return;
+			}
+			if( myAnswer==obj.items[index].correct_answer ){
+				correctAnswers++;
+			}
+			else {
+				incorrectAnswers++;
+			}
+		});
+
+		Start.empty();
+		Start.append(Box().addClass("text-center")
+			.append($("<h1>").text("All Done!"))
+			.append($("<h2>").text("Correct Answers: "+correctAnswers))
+			.append($("<h2>").text("Incorrect Answers: "+incorrectAnswers))
+			.append($("<h2>").text("Unanswered: "+unanswered))
+			);
+	});
 }
 
 $(document).ready(function() {
