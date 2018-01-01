@@ -20,18 +20,63 @@ function Box(){
 
 var Body;
 var Start;
-var Done;
 
 function runQuiz(obj) {
+	var myTimeout;
+	var doneButton;
+	var TimeLeft=obj.items.length * 6;
+	var HTMLTimeLeft=$("<h2>");
 	var radioInpArr;
 	var myAnswers=[];
 	var newDiv;
 
+	function doneFunction() {
+		var correctAnswers=0;
+		var incorrectAnswers=0;
+		var unanswered=0;
+
+		clearTimeout(myTimeout);
+		myAnswers.forEach(function(myAnswer,index){
+			console.log("myAnswer: "+myAnswer+" correct_answer: "+obj.items[index].correct_answer);
+			if( myAnswer== -1){
+				unanswered++;
+				return;
+			}
+			if( myAnswer==obj.items[index].correct_answer ){
+				correctAnswers++;
+			}
+			else {
+				incorrectAnswers++;
+			}
+		});
+
+		Start.empty();
+		Start.append(Box().addClass("text-center")
+			.append($("<h1>").text("All Done!"))
+			.append($("<h2>").text("Correct Answers: "+correctAnswers))
+			.append($("<h2>").text("Incorrect Answers: "+incorrectAnswers))
+			.append($("<h2>").text("Unanswered: "+unanswered))
+			);
+	}
+
+	function decTimeLeft(){
+		TimeLeft--;
+		HTMLTimeLeft.text("TimeLeft: "+TimeLeft+" Secs");
+		if( TimeLeft>0) {
+			return;
+		}
+		doneFunction();
+	}
+
 	if( obj.background_image!==null){
 		Body.css("background-image","url("+obj.background_image+")");
 	}
-	Start.append(Box().addClass("text-center").append($("<h1>").text(obj.title)));
-
+	Start.append(
+		Box().addClass("text-center")
+				.append($("<h1>").text(obj.title))
+				.append(HTMLTimeLeft)
+		);
+	
 	obj.items.forEach(function(questionGroup,questionNr){
 		myAnswers.push(-1);
 		newDiv=Box();
@@ -60,36 +105,12 @@ function runQuiz(obj) {
 		myAnswers[$(this).attr("name")] = $(this).attr("value");
 	});
 
-	Done=$("<button>").addClass("btn btn-success").css("font-size","36px").text("DONE");
-	Start.append(Box().addClass("text-center").append(Done));
+	doneButton=$("<button>").addClass("btn btn-secondary").css("font-size","36px").text("DONE");
+	Start.append(Box().addClass("text-center").append(doneButton));
 
-	Done.on("click",function(){
-		var correctAnswers=0;
-		var incorrectAnswers=0;
-		var unanswered=0;
-		
-		myAnswers.forEach(function(myAnswer,index){
-			console.log("myAnswer: "+myAnswer+" correct_answer: "+obj.items[index].correct_answer);
-			if( myAnswer== -1){
-				unanswered++;
-				return;
-			}
-			if( myAnswer==obj.items[index].correct_answer ){
-				correctAnswers++;
-			}
-			else {
-				incorrectAnswers++;
-			}
-		});
-
-		Start.empty();
-		Start.append(Box().addClass("text-center")
-			.append($("<h1>").text("All Done!"))
-			.append($("<h2>").text("Correct Answers: "+correctAnswers))
-			.append($("<h2>").text("Incorrect Answers: "+incorrectAnswers))
-			.append($("<h2>").text("Unanswered: "+unanswered))
-			);
-	});
+	HTMLTimeLeft.text("TimeLeft: "+TimeLeft+" Secs");
+	doneButton.on("click",doneFunction);
+	myTimeout = setInterval(decTimeLeft, 1000);
 }
 
 $(document).ready(function() {
