@@ -61,13 +61,14 @@ function runQuiz(obj) {
 
 	function decTimeLeft(){
 		TimeLeft--;
-		HTMLTimeLeft.text("TimeLeft: "+TimeLeft+" Secs");
+		HTMLTimeLeft.text("Time Left: "+TimeLeft+" Secs");
 		if( TimeLeft>0) {
 			return;
 		}
 		doneFunction();
 	}
 
+	Start.empty();
 	if( obj.background_image!==null){
 		Body.css("background-image","url("+obj.background_image+")");
 	}
@@ -118,6 +119,10 @@ $(document).ready(function() {
 Body=$("body");
 Start=$("#start");
 
-runQuiz(Trivia);
+var StartButton=$("<button>").addClass("btn btn-secondary").css("font-size","36px").text("START");
+Start.append(Box().addClass("text-center").append(StartButton));
+StartButton.on("click",function(){
+	runQuiz(Trivia);
+	});
 
 });
